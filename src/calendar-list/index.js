@@ -204,7 +204,6 @@ class CalendarList extends Component {
         style={[this.style.container, this.props.style]}
         initialListSize={this.props.pastScrollRange + this.props.futureScrollRange + 1}
         data={this.state.rows}
-        initialNumToRender={50}
         //snapToAlignment='start'
         //snapToInterval={this.calendarHeight}
         removeClippedSubviews={this.props.removeClippedSubviews}
