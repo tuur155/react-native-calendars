@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import {shouldUpdate} from '../../../component-updater';
+import * as Animatable from 'react-native-animatable';
+import LinearGradient from 'react-native-linear-gradient';
+import { shouldUpdate } from '../../../component-updater';
 
 import styleConstructor from './style';
 
@@ -14,24 +16,30 @@ class Day extends Component {
     theme: PropTypes.object,
     marking: PropTypes.any,
     onPress: PropTypes.func,
+    onLongPress: PropTypes.func,
     date: PropTypes.object,
+    uren: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
     this.style = styleConstructor(props.theme);
     this.onDayPress = this.onDayPress.bind(this);
+    this.onDayLongPress = this.onDayLongPress.bind(this);
   }
 
   onDayPress() {
     this.props.onPress(this.props.date);
   }
 
+  onDayLongPress() {
+    this.props.onLongPress(this.props.date);
+  }
   shouldComponentUpdate(nextProps) {
-    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress']);
+    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress', 'uur', 'selected', 'color']);
   }
 
-  renderPeriods(marking) {
+  renderPeriods(marking, waiting) {
     const baseDotStyle = [this.style.dot, this.style.visibleDot];
     if (
       marking.periods &&
@@ -61,6 +69,14 @@ class Day extends Component {
             marginRight: 4,
           });
         }
+
+        if (waiting) {
+          const colors = [];
+          colors.push(period.color, period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, period.color)
+          return <LinearGradient style={style} colors={colors} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} ><View key={index} style={{ flex: 1 }} /></LinearGradient>
+
+        }
+
         return <View key={index} style={style} />;
       });
     }
@@ -70,39 +86,69 @@ class Day extends Component {
   render() {
     const containerStyle = [this.style.base];
     const textStyle = [this.style.text];
+    const stretch = [this.style.stretch];
+    const uren = [this.style.uren];
+    const gradient = []
 
     const marking = this.props.marking || {};
-    const periods = this.renderPeriods(marking);
+    const periods = this.renderPeriods(marking, this.props.wachtende);
 
     if (marking.selected) {
       containerStyle.push(this.style.selected);
       textStyle.push(this.style.selectedText);
+      uren.push(this.style.selectedText);
     } else if (
       typeof marking.disabled !== 'undefined'
         ? marking.disabled
         : this.props.state === 'disabled'
     ) {
       textStyle.push(this.style.disabledText);
+      uren.push(this.style.disabledText);
     } else if (this.props.state === 'today') {
       containerStyle.push(this.style.today);
       textStyle.push(this.style.todayText);
     }
+
+    let colors = ['white', 'white'];
+    if (this.props.color !== undefined) {
+      colors = []
+      stretch.push({ overflow: 'hidden', marginLeft: 5 })
+      let bezettingProcent = parseInt(this.props.color);
+
+      // kleur en gradient berekening
+      let green = 250;
+      let red = 0
+      bezettingProcent = bezettingProcent * 5;
+      if (bezettingProcent < 250) {
+        red = red + bezettingProcent;
+        colors.push('white', 'rgba(' + red + ', ' + green + ', 0, ' + ((bezettingProcent / 500) + 0.25) + ')')
+      } else {
+        red = red + 250
+        green = green - (bezettingProcent - 250)
+        colors.push('white', 'rgba(' + red + ', ' + green + ', 0, ' + ((bezettingProcent / 500) + 0.25) + ')')
+      }
+    }
     return (
       <View
-        style={{
-          alignSelf: 'stretch'
-        }}>
-        <TouchableOpacity style={containerStyle} onPress={this.onDayPress}>
-          <Text allowFontScaling={false} style={textStyle}>
-            {String(this.props.children)}
-          </Text>
-        </TouchableOpacity>
-        <View
-          style={{
-            alignSelf: 'stretch',
-          }}>
-          {periods}
-        </View>
+        style={stretch}>
+        <LinearGradient style={gradient} colors={colors} start={{ x: 1, y: 0 }} end={{ x: 1, y: 1 }}>
+          <TouchableOpacity
+            style={containerStyle}
+            onPress={this.onDayPress}
+            onLongPress={this.onDayLongPress}
+          >
+            <Text allowFontScaling={false} style={textStyle}>
+              {String(this.props.children)}
+            </Text>
+            <Text style={uren}>{this.props.uur}</Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              alignSelf: 'stretch',
+            }}>
+            {periods}
+          </View>
+        </LinearGradient>
       </View>
     );
   }
