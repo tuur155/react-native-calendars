@@ -23,10 +23,14 @@ class CalendarListItem extends Component {
   render() {
     const row = this.props.item;
     if (row.getTime) {
+      let height = this.props.calendarHeight;
+      // if (row.getMonth() === 11) {
+      // height += height / 5;
+      // }
       return (
         <Calendar
           theme={this.props.theme}
-          style={[{ height: this.props.calendarHeight, width: this.props.calendarWidth }, this.style.calendar]}
+          style={[{ height, width: this.props.calendarWidth }, this.style.calendar]}
           current={row}
           hideArrows={this.props.hideArrows}
           hideExtraDays={this.props.hideExtraDays}
@@ -46,6 +50,7 @@ class CalendarListItem extends Component {
           showWeekNumbers={this.props.showWeekNumbers}
           uren={this.props.uren}
           bezettingColor={this.props.bezettingColor}
+          wachtende={this.props.wachtende}
         />);
     } else {
       const text = row.toString();
