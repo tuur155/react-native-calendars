@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
+import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { shouldUpdate } from '../../../component-updater';
 
@@ -38,7 +39,7 @@ class Day extends Component {
     return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress', 'uur', 'selected', 'color']);
   }
 
-  renderPeriods(marking) {
+  renderPeriods(marking, waiting) {
     const baseDotStyle = [this.style.dot, this.style.visibleDot];
     if (
       marking.periods &&
@@ -68,6 +69,14 @@ class Day extends Component {
             marginRight: 4,
           });
         }
+
+        if (waiting) {
+          const colors = [];
+          colors.push(period.color, period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, period.color)
+          return <LinearGradient style={style} colors={colors} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} ><View key={index} style={{ flex: 1 }} /></LinearGradient>
+
+        }
+
         return <View key={index} style={style} />;
       });
     }
@@ -82,7 +91,7 @@ class Day extends Component {
     const gradient = []
 
     const marking = this.props.marking || {};
-    const periods = this.renderPeriods(marking);
+    const periods = this.renderPeriods(marking, this.props.wachtende);
 
     if (marking.selected) {
       containerStyle.push(this.style.selected);
@@ -119,7 +128,6 @@ class Day extends Component {
         colors.push('white', 'rgba(' + red + ', ' + green + ', 0, ' + ((bezettingProcent / 500) + 0.25) + ')')
       }
     }
-
     return (
       <View
         style={stretch}>

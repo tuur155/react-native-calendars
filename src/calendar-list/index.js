@@ -58,7 +58,6 @@ class CalendarList extends Component {
   constructor(props) {
     super(props);
     this.style = styleConstructor(props.theme);
-
     const rows = [];
     const texts = [];
     const date = parseDate(props.current) || XDate();
@@ -125,7 +124,7 @@ class CalendarList extends Component {
     this.listView.scrollToOffset({ offset: scrollAmount, animated: false });
   }
 
-  componentWillReceiveProps(props) {
+  UNSAFE_componentWillReceiveProps(props) {
     const current = parseDate(this.props.current);
     const nextCurrent = parseDate(props.current);
     if (nextCurrent && current && nextCurrent.getTime() !== current.getTime()) {

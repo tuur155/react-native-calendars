@@ -53,6 +53,7 @@ class Calendar extends Component {
     hideExtraDays: PropTypes.bool,
     uren: PropTypes.object,
     bezettingColor: PropTypes.object,
+    wachtende: PropTypes.object,
     // Handler which gets executed on day press. Default = undefined
     onDayPress: PropTypes.func,
     // Handler which gets executed on day long press. Default = undefined
@@ -78,6 +79,7 @@ class Calendar extends Component {
     onPressArrowLeft: PropTypes.func,
     // Handler which gets executed when press arrow icon left. It receive a callback can go next month
     onPressArrowRight: PropTypes.func
+
   };
 
   constructor(props) {
@@ -100,7 +102,7 @@ class Calendar extends Component {
     this.shouldComponentUpdate = shouldComponentUpdate;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const current = parseDate(nextProps.current);
     if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
       this.setState({
@@ -177,6 +179,8 @@ class Calendar extends Component {
     const date = day.getDate();
     const dict = this.props.uren;
     const dictColor = this.props.bezettingColor;
+    const dictWachtende = this.props.wachtende
+
     let year;
     let month;
     let stringDay;
@@ -187,9 +191,10 @@ class Calendar extends Component {
     if (month.length < 2) { month = '0' + month; }
     if (stringDay.length < 2) { stringDay = '0' + stringDay; }
     stringDate = [year, month, stringDay].join('-');
+
     uur = dict[stringDate.toString()];
     color = dictColor[stringDate.toString()];
-
+    const wachtende = dictWachtende[stringDate.toString()];
 
     return (
       <View style={{ flex: 1, alignItems: 'center' }} key={id}>
@@ -201,6 +206,7 @@ class Calendar extends Component {
           date={xdateToData(day)}
           marking={this.getDateMarking(day)}
           uur={uur}
+          wachtende={wachtende}
           selected={this.getSelected(day)}
           color={color}
         >
