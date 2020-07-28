@@ -110,11 +110,13 @@ class Day extends Component {
     }
 
     let colors = ['white', 'white'];
+    let underText = this.props.uur
     if (this.props.color !== undefined) {
+
       colors = []
       stretch.push({ overflow: 'hidden', marginLeft: 5 })
-      let bezettingProcent = parseInt(this.props.color);
-
+      let bezettingProcent = parseInt(this.props.color.procent);
+      underText = this.props.color.aantal + "/" + this.props.color.totaal;
       // kleur en gradient berekening
       let green = 250;
       let red = 0
@@ -127,6 +129,7 @@ class Day extends Component {
         green = green - (bezettingProcent - 250)
         colors.push('white', 'rgba(' + red + ', ' + green + ', 0, ' + ((bezettingProcent / 500) + 0.25) + ')')
       }
+
     }
     return (
       <View
@@ -140,7 +143,7 @@ class Day extends Component {
             <Text allowFontScaling={false} style={textStyle}>
               {String(this.props.children)}
             </Text>
-            <Text style={uren}>{this.props.uur}</Text>
+            <Text style={uren}>{underText}</Text>
           </TouchableOpacity>
           <View
             style={{
