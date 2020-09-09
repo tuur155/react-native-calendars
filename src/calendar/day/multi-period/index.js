@@ -72,6 +72,9 @@ class Day extends Component {
 
         if (waiting) {
           const colors = [];
+          if (period.color === 'transparent') {
+            period.color = 'white';
+          }
           colors.push(period.color, period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, 'white', 'white', period.color, period.color)
           return <LinearGradient style={style} colors={colors} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} ><View key={index} style={{ flex: 1 }} /></LinearGradient>
 
