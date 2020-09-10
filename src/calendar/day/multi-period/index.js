@@ -36,7 +36,7 @@ class Day extends Component {
     this.props.onLongPress(this.props.date);
   }
   shouldComponentUpdate(nextProps) {
-    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress', 'uur', 'selected', 'color']);
+    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress', 'uur', 'selected', 'color', 'wachtende']);
   }
 
   renderPeriods(marking, waiting) {
