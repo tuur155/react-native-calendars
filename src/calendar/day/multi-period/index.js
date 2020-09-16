@@ -119,7 +119,7 @@ class Day extends Component {
       colors = []
       stretch.push({ overflow: 'hidden', marginLeft: 5 })
       let bezettingProcent = parseInt(this.props.color.procent);
-      underText = this.props.color.aantal + "/" + this.props.color.totaal;
+      underText = this.props.color.text;
       // kleur en gradient berekening
       let green = 250;
       let red = 0
